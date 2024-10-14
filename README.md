@@ -49,5 +49,7 @@ export default tseslint.config({
 })
 ```
 
+# tutorial -> https://www.youtube.com/watch?v=ZqEa8fTxypQ
+
 # Tailwind
 https://tailwindcss.com/docs/installation
