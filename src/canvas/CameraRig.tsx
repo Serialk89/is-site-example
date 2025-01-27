@@ -5,6 +5,7 @@ import { useSnapshot } from 'valtio';
 import state from '../store';
 
 interface CameraRigProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
 }
 
@@ -17,7 +18,7 @@ const CameraRig = ({ children }: CameraRigProps) => {
     const isMobile = window.innerWidth <= 600;
 
     // set the initial position of the model
-    let targetPosition = [-0.4, 0, 2];
+    let targetPosition: [number, number, number] = [-0.4, 0, 2];
     if(snap.intro) {
       if(isBreakpoint) targetPosition = [0, 0, 2];
       if(isMobile) targetPosition = [0, 0.2, 2.5];
@@ -30,8 +31,10 @@ const CameraRig = ({ children }: CameraRigProps) => {
     easing.damp3(state.camera.position, targetPosition, 0.25, delta)
 
     // set the model rotation smoothly
+    const rotation = null;
+
     easing.dampE(
-      group.current.rotation,
+      rotation,
       [state.pointer.y / 10, -state.pointer.x / 5, 0],
       0.25,
       delta

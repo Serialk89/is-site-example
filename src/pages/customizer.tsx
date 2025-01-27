@@ -1,12 +1,10 @@
-import React, { useState, iseEffect } from 'react';
+import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSnapshot } from 'valtio';
-import config from '../config/config';
 import state from '../store';
-import { download } from '../assets';
-import { downloadCanvasToImage, reader } from '../config/helpers';
+import { reader } from '../config/helpers';
 import { EditorTabs, FilterTabs, DecalTypes } from '../config/constants';
-import { fadeAnimation, slideAnimation } from '../config/motion';
+import { slideAnimation } from '../config/motion';
 import { Tab, ColorPicker, CustomButton, FilePicker, IAPicker } from '../components';
 
 
@@ -123,7 +121,12 @@ const Customize = () => {
             <div className='flex items-center min-h-screen'>
               <div className='editortabs-container tabs'>
                 {EditorTabs.map((tab) => (
-                  <Tab key={tab.name} tab={tab} handleClick={() => setActiveEditorTab(tab.name)} />
+                  <Tab 
+                    key={tab.name} 
+                    tab={tab}
+                    isFilterTab={false}
+                    isActiveTab={false} 
+                    handleClick={() => setActiveEditorTab(tab.name)} />
                 ))}
                 {generateTabContent()}
               </div>
@@ -134,7 +137,13 @@ const Customize = () => {
           </motion.div>
           <motion.div className='filtertabs-container' {...slideAnimation("up")}>
             {FilterTabs.map((tab) => (
-              <Tab key={tab.name} tab={tab} isFilterTab isActiveTab={activeFilterTab[tab.name]} handleClick={() => handleActiveFilterTab(tab.name)} />
+              <Tab 
+                key={tab.name} 
+                tab={tab} 
+                isFilterTab 
+                isActiveTab={activeFilterTab[tab.name]} 
+                handleClick={() => handleActiveFilterTab(tab.name)} 
+              />
             ))}
           </motion.div>
         </>

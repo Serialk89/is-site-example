@@ -1,0 +1,48 @@
+name: Deploy to Cloud Run
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Set up node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependecies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Google Cloud Authenticate
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_ACCOUNT_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Google Cloud Config
+        run: |
+          gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+      - name: Build and push docker Image
+        run: |
+          IMAGE_NAME=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ia-tshirt-site/ia-tshirt-site:$GITHUB_SHA
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
+
+      - name: Deploy to Cloud Run
+        run: |
+          IMAGE_NAME=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ia-tshirt-site/ia-tshirt-site:$GITHUB_SHA
+          gcloud run deploy ia-tshirt-site \
+            --image $IMAGE_NAME \
+            --region us-central1 \
+            --platform managed \
+            --allow-unauthenticated \
+            --quiet

@@ -1,4 +1,4 @@
-import CustomButton from './customButton';
+import CustomButton from './CustomButton';
 
 const AIPicker = ({ prompt, setPrompt, generatingImg, handlerSubmit }) => {
   return (
