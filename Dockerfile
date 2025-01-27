@@ -5,16 +5,16 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copiamos los archivos de configuración del proyecto
-COPY package.json yarn.lock* ./
+COPY package.json package-lock.json* ./
 
 # Instalamos las dependencias
-RUN yarn install --frozen-lockfile
+RUN npm install
 
 # Copiamos el resto de los archivos del proyecto
 COPY . .
 
 # Generamos el build de producción
-RUN yarn build
+RUN npm run build
 
 # Usamos una imagen ligera de Nginx para servir la aplicación
 FROM nginx:alpine
